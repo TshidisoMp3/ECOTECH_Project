@@ -6,7 +6,7 @@ from flask_login import LoginManager
 db = SQLAlchemy()
 DB_NAME = 'database.sqlite3'
 
-
+# Create your database
 def create_database():
     db.create_all()
     print('Database Created')
@@ -14,14 +14,14 @@ def create_database():
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = 'hbnwdvbn ajnbsjn ahe'
+    app.config['SECRET_KEY'] = 'Secr3t K3y'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
 
     db.init_app(app)
 
     @app.errorhandler(404)
     def page_not_found(error):
-        return render_template('404.html')
+        return render_template('404.html file here')
 
     login_manager = LoginManager()
     login_manager.init_app(app)
@@ -36,11 +36,12 @@ def create_app():
     from .admin import admin
     from .models import Customer, Cart, Product, Order
 
-    app.register_blueprint(views, url_prefix='/') # localhost:5000/about-us
-    app.register_blueprint(auth, url_prefix='/') # localhost:5000/auth/change-password
+    app.register_blueprint(views, url_prefix='/')
+    app.register_blueprint(auth, url_prefix='/') 
     app.register_blueprint(admin, url_prefix='/')
-
-    # with app.app_context():
-    #     create_database()
+    
+    # Comment out after you have created the database
+    with app.app_context():
+        create_database()
 
     return app

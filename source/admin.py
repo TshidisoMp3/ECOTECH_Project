@@ -53,9 +53,9 @@ def add_shop_items():
             except Exception as e:
                 print(e)
                 flash('Product Not Added!!')
-
-        return render_template('add_shop_items.html', form=form)
-
+        # add the add_shop_items.html file here
+        return render_template('add_shop_items.html file here', form=form)
+    # add the 404.html file here
     return render_template('404.html file here')
 
 
@@ -65,12 +65,14 @@ def shop_items():
     if current_user.id == 1:
         items = Product.query.order_by(Product.date_added).all()
         return render_template('shop_items.html', items=items)
-    return render_template('404.html file here')
+    return render_template('404.html file here') # add 404.html file here
 
 
 @admin.route('/update-item/<int:item_id>', methods=['GET', 'POST'])
 @login_required
 def update_item(item_id):
+    """ Update items """
+
     if current_user.id == 1:
         form = ShopItemsForm()
 

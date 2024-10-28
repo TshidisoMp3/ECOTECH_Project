@@ -14,16 +14,18 @@ API_TOKEN = 'YOUR_API_TOKEN'
 
 @views.route('/')
 def home():
+    """ This is the homepage of the website """
 
     items = Product.query.filter_by(flash_sale=True)
 
-    return render_template('home.html file here', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
-                           if current_user.is_authenticated else [])
+    return render_template('home.html file here', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all() if current_user.is_authenticated else [])
 
 
 @views.route('/add-to-cart/<int:item_id>')
 @login_required
 def add_to_cart(item_id):
+    """ Function to add items to cart """
+
     item_to_add = Product.query.get(item_id)
     item_exists = Cart.query.filter_by(product_link=item_id, customer_link=current_user.id).first()
     if item_exists:
@@ -56,6 +58,7 @@ def add_to_cart(item_id):
 @views.route('/cart')
 @login_required
 def show_cart():
+    """ Function to show cart; including the number of items in cart """
     cart = Cart.query.filter_by(customer_link=current_user.id).all()
     amount = 0
     for item in cart:
@@ -67,6 +70,8 @@ def show_cart():
 @views.route('/pluscart')
 @login_required
 def plus_cart():
+    """ Add item to cart """
+
     if request.method == 'GET':
         cart_id = request.args.get('cart_id')
         cart_item = Cart.query.get(cart_id)
@@ -92,6 +97,8 @@ def plus_cart():
 @views.route('/minuscart')
 @login_required
 def minus_cart():
+    """ Remove item from cart """
+
     if request.method == 'GET':
         cart_id = request.args.get('cart_id')
         cart_item = Cart.query.get(cart_id)
@@ -117,6 +124,8 @@ def minus_cart():
 @views.route('removecart')
 @login_required
 def remove_cart():
+    """ Remove Cart """
+
     if request.method == 'GET':
         cart_id = request.args.get('cart_id')
         cart_item = Cart.query.get(cart_id)
@@ -142,6 +151,8 @@ def remove_cart():
 @views.route('/place-order')
 @login_required
 def place_order():
+    """ Function to place an order """
+
     customer_cart = Cart.query.filter_by(customer_link=current_user.id)
     if customer_cart:
         try:
@@ -194,10 +205,10 @@ def order():
 
 @views.route('/search', methods=['GET', 'POST'])
 def search():
+    """ Search for Item """
     if request.method == 'POST':
         search_query = request.form.get('search')
         items = Product.query.filter(Product.product_name.ilike(f'%{search_query}%')).all()
-        return render_template('search.html file here', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
-                           if current_user.is_authenticated else [])
+        return render_template('search.html file here', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all() if current_user.is_authenticated else [])
 
     return render_template('search.html file here')

@@ -10,6 +10,7 @@ auth = Blueprint('auth', __name__)
 
 @auth.route('/sign-up', methods=['GET', 'POST'])
 def sign_up():
+    """ SignUp Route For signing into account By User """
     form = SignUpForm()
     if form.validate_on_submit():
         email = form.email.data
@@ -42,6 +43,7 @@ def sign_up():
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
+    """ Login Function for loging into account by user """
     form = LoginForm()
     if form.validate_on_submit():
         email = form.email.data
@@ -65,6 +67,7 @@ def login():
 @auth.route('/logout', methods=['GET', 'POST'])
 @login_required
 def log_out():
+    """ logout Function to logout of the account by User """
     logout_user()
     return redirect('/')
 
@@ -72,6 +75,8 @@ def log_out():
 @auth.route('/profile/<int:customer_id>')
 @login_required
 def profile(customer_id):
+    """ Proflie Template Of the User """
+
     customer = Customer.query.get(customer_id)
     return render_template('profile.html file here', customer=customer)
 
@@ -79,6 +84,8 @@ def profile(customer_id):
 @auth.route('/change-password/<int:customer_id>', methods=['GET', 'POST'])
 @login_required
 def change_password(customer_id):
+    """ Change Password Form for changing password of the user """
+
     form = PasswordChangeForm()
     customer = Customer.query.get(customer_id)
     if form.validate_on_submit():
